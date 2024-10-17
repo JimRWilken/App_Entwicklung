@@ -13,7 +13,8 @@ import eyeHide2 from "../assets/icons/eye-hide-2.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import eye2 from "../assets/icons/eye-2.png";
-
+import barcode from "../assets/icons/barcode.png";
+import kamerawechsel from "../assets/icons/kamerawechsel.png";
 export default {
   play,
   bookmark,
@@ -30,4 +31,6 @@ export default {
   eye,
   eye2,
   eyeHide2,
+  barcode,
+  kamerawechsel,
 };

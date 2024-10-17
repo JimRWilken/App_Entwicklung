@@ -7,12 +7,12 @@ import { Loader } from "../../components";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center gap-2">
+    <View className="items-center justify-center gap-1.5" style={{ marginTop: 15 }}>
       <Image
         source={icon}
         resizeMode="contain"
         tintColor={color}
-        className="w-6 h-6"
+        className="w-5 h-5"
       />
       <Text
         className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
@@ -37,10 +37,10 @@ const TabLayout = () => {
           tabBarInactiveTintColor: "#CDCDE0",
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: "#616353",
+            backgroundColor: "#30302b",
             borderTopWidth: 1,
-            borderTopColor: "616353",
-            height: 90,
+            borderTopColor: "#30302b",
+            height: 75,
           },
         }}
       >
@@ -74,6 +74,21 @@ const TabLayout = () => {
             ),
           }}
         />
+        <Tabs.Screen
+          name="Scannen"
+          options={{
+            title: "Scannen",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.barcode}
+                color={color}
+                name="Scannen"
+                focused={focused}
+              />
+            ),
+          }}
+        />
 
         <Tabs.Screen
           name="create"
@@ -99,7 +114,7 @@ const TabLayout = () => {
               <TabIcon
                 icon={icons.profile}
                 color={color}
-                name="Profile"
+                name="Profil"
                 focused={focused}
               />
             ),
