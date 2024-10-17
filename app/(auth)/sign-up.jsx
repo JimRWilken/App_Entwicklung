@@ -38,7 +38,7 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-secondary h-full">
       <ScrollView>
         <View className="w-full justify-center  items-center px-4">
           <Image
@@ -55,7 +55,7 @@ const SignUp = () => {
           ></FormField>
 
           <FormField
-            title="Email" //Einstellungen für das Log in Feld für die Email
+            title="E-Mail:" //Einstellungen für das Log in Feld für die Email
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-2"
@@ -63,7 +63,7 @@ const SignUp = () => {
           ></FormField>
 
           <FormField
-            title="Passwort" //Einstellungen für das Log in Feld für das Passwort
+            title="Passwort:" //Einstellungen für das Log in Feld für das Passwort
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
@@ -77,13 +77,13 @@ const SignUp = () => {
           ></CustomButton>
 
           <View className="justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-gray-100 font-pregular">
+            <Text className="text-lg text-black-100 font-pregular">
               Sie haben bereits ein Konto?
             </Text>
 
             <Link
               href="/sign-in"
-              className="text-lg font-psemibold text-orang-100"
+              className="text-lg font-psemibold text-blue-700"
             >
               Anmelden
             </Link>

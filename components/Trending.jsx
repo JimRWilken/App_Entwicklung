@@ -17,7 +17,7 @@ return (
   keyExtractor={(item) => item.$id}
   horizontal
   renderItem={({ item }) => (
-    <Text className = 'text-3xl text-white'>
+    <Text className = 'text-3xl text-black'>
       {item.id}
 
     </Text>

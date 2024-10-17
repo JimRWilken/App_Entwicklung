@@ -15,20 +15,20 @@ const FormField = ({
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
-      <Text className="text-base text-white font-psemibold">{title}</Text>
+      <Text className="text-base text-black font-psemibold">{title}</Text>
 
-      <View className="w-full h-16 px-4 bg-secondary-200 rounded-2xl border-2 border-gray-100 focus:border-orange-100 flex flex-row items-center">
+      <View className="w-full h-16 px-4 bg-secondary-200 rounded-2xl border-2 border-gray-100 focus:border-blue-700 flex flex-row items-center">
         <TextInput
           className="flex-1 text-black font-psemibold text-base"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#d9d5c5"
           onChangeText={handleChangeText}
-          secureTextEntry={title === "Passwort" && !showPassword}
+          secureTextEntry={title === "Passwort:" && !showPassword}
           {...props}
         />
 
-        {title === "Passwort" && (
+        {title === "Passwort:" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={!showPassword ? icons.eyeHide2 : icons.eye2}

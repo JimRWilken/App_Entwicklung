@@ -44,7 +44,7 @@ const Rezeptevorschau = ({
         <View className="flex justify-center items-center flex-row flex-1">
           <View className="w-[50px] h-[50px] rounded-full border border-gray-300 flex justify-center items-center p-0.5">
             <Image
-              source={{ uri: avatar }}
+              source={{ uri: Bilder }}
               className="w-full h-full rounded-full"
               resizeMode="cover"
             />

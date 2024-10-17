@@ -18,31 +18,57 @@ const Welcome = () => {
 
   return (
     <GestureHandlerRootView>
-      <SafeAreaView className="bg-primary h-full">
+      <SafeAreaView className="bg-secondary h-full">
         <Loader isLoading={loading} />
         <ScrollView contentContainerStyle={{ height: "100%" }}>
           <View className="w-full justify-center items-center h-full px-4">
+            {/* Logo */}
             <Image
               source={images.logo_bite_safe}
               resizeMode="contain"
               style={{ width: 150, height: 150 }}
             />
-            <View className="relative mt-72">
-              {/*<Text className = 'text-3xl text-white font-bold text-center text-secondary-200'> Entdecke die App </Text>*/}
 
+            {/* Einführungstext */}
+            <View className="relative mt-14">
+              <View className="bg-secondary-200 rounded-xl shadow mb-4 p-6">
+                <Text className="text-3xl font-bold text-black-100 mb-4 text-center">
+                  Willkommen bei BiteSafe!
+                </Text>
+
+                {/* Beschreibung */}
+                <Text className="text-lg font-medium text-gray-700 leading-relaxed text-center mb-6">
+                  Finde heraus, welche Lebensmittel für dich geeignet sind –
+                  ganz einfach und schnell.
+                </Text>
+                <Text className="font-bold text-sm text-gray-700 mb-4">
+                  1. Scanne den Barcode eines Produkts und erhalte sofortige
+                  Ergebnisse zu den Inhaltsstoffen.
+                </Text>
+                <Text className="font-bold text-sm text-gray-700 mb-4">
+                  2. Füge Produkte zu deinen Favoriten hinzu, um sie später
+                  schnell wiederzufinden.</Text>
+                  <Text className="font-bold text-sm text-gray-700">
+                  3. Sichere dir ein unbeschwertes
+                  Einkaufen – entscheide informiert mit BiteSafe!
+                </Text>
+              </View>
+
+              {/* Button */}
               <CustomButton
                 title="Entdecke die App"
                 handlePress={() => router.push("/(auth)/sign-in")}
-                containerStyles=" mt-30 justify-center items-center px-24"
+                containerStyles=" mt-14 justify-center items-center px-24"
+                textStyle="text-white text-lg font-bold"
               />
             </View>
           </View>
         </ScrollView>
 
-        <StatusBar backgroundColor="#161622" style="light"></StatusBar>
+        <StatusBar backgroundColor="#161622" style="light" />
       </SafeAreaView>
     </GestureHandlerRootView>
   );
-};
+}
 
 export default Welcome;
