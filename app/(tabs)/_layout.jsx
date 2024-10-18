@@ -7,7 +7,7 @@ import { Loader } from "../../components";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center gap-1.5" style={{ marginTop: 15 }}>
+    <View className="items-center justify-center gap-1.5" style={{ marginTop: 10 }}>
       <Image
         source={icon}
         resizeMode="contain"
@@ -38,9 +38,10 @@ const TabLayout = () => {
           tabBarShowLabel: false,
           tabBarStyle: {
             backgroundColor: "#111827",
-            borderTopWidth: 1,
+            borderTopWidth: 0,
             borderTopColor: "#30302b",
             height: 75,
+            
           },
         }}
       >

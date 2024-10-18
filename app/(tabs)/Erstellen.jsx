@@ -70,25 +70,35 @@ const Erstellen = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="px-4 my-6">
-        <Text className="text-2xl text-white font-psemibold">
-          Rezept hochladen
+      <ScrollView className=" flex px-4 my-0 h-full">
+        <Text className="text-xl text-black-100 font-psemibold">
+          Erstelle Sie ein Rezept, dass andere sehen können
         </Text>
 
         <FormField
-          title="Video Title"
+          title="Titel des Rezepts:"
           value={form.titel}
-          placeholder="Give your video a catchy title..."
+          placeholder="Geben Sie dem Rezept einen Namen..."
           handleChangeText={(e) => setForm({ ...form, titel: e })}
           otherStyles="mt-10"
         />
+        <FormField
+          title="Zutaten:"
+          value={form.Zutaten}
+          placeholder="Tragen Sie hier ihre Zutaten ein..."
+          handleChangeText={(e) => setForm({ ...form, Zutaten: e })}
+          otherStyles="mt-2"
+        />
+        <FormField
+          title="Beschreibung:"
+          value={form.Beschreibung}
+          placeholder="Tragen Sie hier ihre Zutaten ein..."
+          handleChangeText={(e) => setForm({ ...form, Beschreibung: e })}
+          otherStyles="mt-2"
+        />
 
         <View className="mt-7 space-y-2">
-          <Text className="text-base text-gray-100 font-pmedium">
-            Upload Video
-          </Text>
-
-          <TouchableOpacity onPress={() => openPicker("video")}>
+          <TouchableOpacity onPress={() => openPicker("image")}>
             {form.Bilder ? (
               <Image
                 source={{ uri: form.Bilder.uri }}
@@ -96,12 +106,12 @@ const Erstellen = () => {
                 resizeMode="cover"
               />
             ) : (
-              <View className="w-full h-40 bg-blue-100 rounded-2xl border border-black-200 flex justify-center items-center">
-                <View className="w-14 h-14 border border-dashed border-secondary-100 flex justify-center items-center">
+              <View className="w-50 h-50 bg-blue-100 rounded-2xl border border-secondary-200 flex justify-center items-center">
+                <View className="w-full h-20 border rounded-2xl border-dashed border-secondary-100 flex justify-center items-center">
                   <Image
                     source={icons.upload}
                     resizeMode="contain"
-                    className="w-12 h-12"
+                    className="w-16 h-16"
                   />
                 </View>
               </View>
