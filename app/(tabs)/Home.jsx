@@ -25,8 +25,8 @@ const Home = () => {
 
 
   return (
-    <SafeAreaView className="bg-secondary h-full">
-      <FlatList
+    <View className="bg-secondary h-full">
+      <FlatList className = 'mt-10'
         data={posts} //hier geben wir der flatlist das objekt 
         //data={[]}
         keyExtractor={(item) => item.$id}
@@ -36,7 +36,7 @@ const Home = () => {
           </Rezeptevorschau>
           )}
         ListHeaderComponent={() => (
-          <View className="flex my-3 px-4 space-y-6">
+          <View className="flex my-3 px-4 mt-8 space-y-6">
             <View className="flex justify-between items-start flex-row mb-5">
               <View>
                 <Text className="font-pmedium text-sm text-black-100">
@@ -76,7 +76,7 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

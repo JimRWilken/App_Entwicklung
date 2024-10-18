@@ -69,8 +69,8 @@ const Erstellen = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView className=" flex px-4 my-0 h-full">
+    <View className="bg-secondary flex-1">
+      <ScrollView className=" flex-1 px-4 mt-10">
         <Text className="text-xl text-black-100 font-psemibold">
           Erstelle Sie ein Rezept, dass andere sehen können
         </Text>
@@ -125,8 +125,8 @@ const Erstellen = () => {
           containerStyles="mt-7"
           isLoading={uploading}
         />
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+    </View>
   );
 };
 
