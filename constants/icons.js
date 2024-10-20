@@ -15,6 +15,13 @@ import play from "../assets/icons/play.png";
 import eye2 from "../assets/icons/eye-2.png";
 import barcode from "../assets/icons/barcode.png";
 import kamerawechsel from "../assets/icons/kamerawechsel.png";
+import barcodescan from "../assets/icons/barcodescan.png";
+import barcodelesegerat from "../assets/icons/barcodelesegerat.png";
+import zuruck from "../assets/icons/zuruck.png";
+import blitzlicht from "../assets/icons/blitzlicht.png";
+import magen from "../assets/icons/magen.png";
+
+
 export default {
   play,
   bookmark,
@@ -33,4 +40,9 @@ export default {
   eyeHide2,
   barcode,
   kamerawechsel,
+  barcodescan,
+  barcodelesegerat,
+  zuruck,
+  blitzlicht,
+  magen,
 };

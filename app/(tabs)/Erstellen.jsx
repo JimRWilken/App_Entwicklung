@@ -125,7 +125,7 @@ const Erstellen = () => {
           containerStyles="mt-7"
           isLoading={uploading}
         />
-        </ScrollView>
+      </ScrollView>
     </View>
   );
 };

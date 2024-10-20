@@ -37,6 +37,10 @@ module.exports = {
         pblack: ["Poppins-Black", "sans-serif"],
       },
     },
+    spacing: {
+      4.5: "1.125rem", // 18px - könnte visuell eng aussehen
+      4.75: "1.1875rem", // 19px - näher an 20px
+    },
   },
   plugins: [],
 };

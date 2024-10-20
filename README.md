@@ -1,7 +1,3 @@
-Hier ist eine strukturierte und gut lesbare **README**-Datei basierend auf deinen Notizen zur App-Entwicklung für iOS:
-
----
-
 # App Entwicklung für iOS
 
 Dies ist ein Projekt zur Entwicklung einer iOS-App mit React Native und Expo. Die App bietet Funktionen wie das Erstellen und Verwalten von Rezepten, das Scannen von Lebensmitteln und das Filtern nach Unverträglichkeiten.
@@ -69,3 +65,8 @@ In der App wird eine Tab-Navigation verwendet. Hier ist eine wichtige Notiz zur 
    ```
 
 - In diesem Beispiel wird mit `mt-10` sichergestellt, dass der Inhalt unterhalb der Notch beginnt, um visuelle Probleme zu vermeiden.
+
+
+interessantes feature: 
+
+speisekammer.app -> mittels abrcode lebensmittel scannen und mindesthaltbarkeitsdatum eintrtagen. dann alerts/übersichten erstellen

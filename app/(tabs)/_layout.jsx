@@ -41,7 +41,6 @@ const TabLayout = () => {
             borderTopWidth: 0,
             borderTopColor: "#30302b",
             height: 75,
-            
           },
         }}
       >
@@ -61,15 +60,15 @@ const TabLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="Suchen"
+          name="Krankheiten"
           options={{
-            title: "Suchen",
+            title: "Krankheiten",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={icons.search}
+                icon={icons.magen}
                 color={color}
-                name="Suchen"
+                name="Krankheiten"
                 focused={focused}
               />
             ),
