@@ -43,6 +43,8 @@ const RootLayout = () => {
           <Stack.Screen name="Rezepte/rezeptedetail" options={{ headerShown: false }} />
           <Stack.Screen name="search/[query]" options={{ headerShown: false }} />
           <Stack.Screen name="Kamera/CameraUsage" options={{ headerShown: false }} />
+          <Stack.Screen name="Profileinstellungen/EditProfile" options={{ headerShown: false }} />
+          <Stack.Screen name="Profileinstellungen/Settings" options={{ headerShown: false}}/>
         </Stack>
       </GlobalProvider>
     );

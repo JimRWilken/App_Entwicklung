@@ -10,6 +10,7 @@ import { images } from "../constants";
 import { CustomButton, Loader } from "../components";
 import "react-native-url-polyfill/auto";
 import { useGlobalContext } from "../context/GlobalProvider";
+import { StyleSheet } from "react-native";
 
 const Welcome = () => {
   const { loading, isLogged } = useGlobalContext();
@@ -18,50 +19,47 @@ const Welcome = () => {
 
   return (
     <GestureHandlerRootView>
-      <SafeAreaView className="bg-secondary h-full">
+      <SafeAreaView style={styles.container}>
         <Loader isLoading={loading} />
-        <ScrollView contentContainerStyle={{ height: "100%" }}>
-          <View className="w-full justify-center items-center h-full px-4">
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.innerContainer}>
             {/* Logo */}
             <Image
               source={images.logo_bite_safe}
               resizeMode="contain"
-              style={{ width: 150, height: 150 }}
+              style={styles.logo}
             />
 
             {/* Einführungstext */}
-            <View className="relative mt-14">
-              <View className="bg-secondary-200 rounded-xl shadow mb-4 p-6">
-                <Text className="text-3xl font-bold text-black-100 mb-4 text-center">
-                  Willkommen bei BiteSafe!
-                </Text>
+            <View style={styles.card}>
+              <Text style={styles.title}>Willkommen bei BiteSafe!</Text>
 
-                {/* Beschreibung */}
-                <Text className="text-lg font-medium text-gray-700 leading-relaxed text-center mb-6">
-                  Finde heraus, welche Lebensmittel für dich geeignet sind –
-                  ganz einfach und schnell.
-                </Text>
-                <Text className="font-bold text-sm text-gray-700 mb-4">
-                  1. Scanne den Barcode eines Produkts und erhalte sofortige
-                  Ergebnisse zu den Inhaltsstoffen.
-                </Text>
-                <Text className="font-bold text-sm text-gray-700 mb-4">
-                  2. Füge Produkte zu deinen Favoriten hinzu, um sie später
-                  schnell wiederzufinden.</Text>
-                  <Text className="font-bold text-sm text-gray-700">
-                  3. Sichere dir ein unbeschwertes
-                  Einkaufen – entscheide informiert mit BiteSafe!
-                </Text>
-              </View>
-
-              {/* Button */}
-              <CustomButton
-                title="Entdecke die App"
-                handlePress={() => router.push("/(auth)/sign-in")}
-                containerStyles=" mt-14 justify-center items-center px-24"
-                textStyle="text-white text-lg font-bold"
-              />
+              {/* Beschreibung */}
+              <Text style={styles.description}>
+                Finde heraus, welche Lebensmittel für dich geeignet sind – ganz
+                einfach und schnell.
+              </Text>
+              <Text style={styles.step}>
+                1. Scanne den Barcode eines Produkts und erhalte sofortige
+                Ergebnisse zu den Inhaltsstoffen.
+              </Text>
+              <Text style={styles.step}>
+                2. Füge Produkte zu deinen Favoriten hinzu, um sie später
+                schnell wiederzufinden.
+              </Text>
+              <Text style={styles.step}>
+                3. Sichere dir ein unbeschwertes Einkaufen – entscheide
+                informiert mit BiteSafe!
+              </Text>
             </View>
+
+            {/* Button */}
+            <CustomButton
+              title="Entdecke die App"
+              handlePress={() => router.push("/(auth)/sign-in")}
+              containerStyles={styles.buttonContainer}
+              textStyle={styles.buttonText}
+            />
           </View>
         </ScrollView>
 
@@ -69,6 +67,92 @@ const Welcome = () => {
       </SafeAreaView>
     </GestureHandlerRootView>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  innerContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginTop: 10,
+  },
+  card: {
+    backgroundColor: "#DFD8C8",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+    padding: 20,
+    marginTop: 20,
+    width: "100%",
+    marginBottom: 40,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  description: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 15,
+  },
+  step: {
+    fontWeight: "500",
+    color: "#555",
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0a0a0a",
+    borderRadius: 10,
+    width: 350,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+    header: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  welcomeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  welcomeText: {
+    fontFamily: "HelveticaNeue",
+    fontSize: 14,
+    color: "#52575D",
+  },
+});
 
 export default Welcome;

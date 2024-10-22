@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     position: "absolute",
     alignSelf: "center",
-    bottom: 6,
+    top: 1,
   },
 });

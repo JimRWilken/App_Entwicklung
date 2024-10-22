@@ -20,6 +20,7 @@ import barcodelesegerat from "../assets/icons/barcodelesegerat.png";
 import zuruck from "../assets/icons/zuruck.png";
 import blitzlicht from "../assets/icons/blitzlicht.png";
 import magen from "../assets/icons/magen.png";
+import kamera from "../assets/icons/kamera.png";
 
 
 export default {
@@ -45,4 +46,5 @@ export default {
   zuruck,
   blitzlicht,
   magen,
+  kamera,
 };

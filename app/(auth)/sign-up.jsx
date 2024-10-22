@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import { View, Text, ScrollView, Alert, Image, StyleSheet } from "react-native";
 
 import { images } from "../../constants";
 import { createUser } from "../../lib/appwrite";
@@ -20,7 +20,8 @@ const SignUp = () => {
 
   const submit = async () => {
     if (form.username === "" || form.email === "" || form.password === "") {
-      Alert.alert("Error", "Bitte füllen Sie alle Felder aus.");
+      Alert.alert("Fehler", "Bitte füllen Sie alle Felder aus.");
+      return; // Beende die Funktion, wenn das Formular ungültig ist
     }
 
     setSubmitting(true);
@@ -31,60 +32,59 @@ const SignUp = () => {
       setIsLogged(true);
       router.replace("/Home");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Fehler", error.message);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <SafeAreaView className="bg-secondary h-full">
-      <ScrollView>
-        <View className="w-full justify-center  items-center px-4">
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.innerContainer}>
           <Image
             source={images.logo_bite_safe}
             resizeMode="contain"
-            style={{ width: 150, height: 150 }}
-          ></Image>
+            style={styles.logo}
+          />
 
           <FormField
-            title="Benutzername" //Einstellungen für das Log in Feld für den Username
+            title="Benutzername:"
             value={form.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles="mt-10"
-          ></FormField>
+            placeholder="Benutzername eingeben" // Platzhalter für Benutzername
+          />
 
           <FormField
-            title="E-Mail:" //Einstellungen für das Log in Feld für die Email
+            title="E-Mail:"
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-2"
-            keyboardType="email-adress"
-          ></FormField>
+            keyboardType="email-address"
+            placeholder="E-Mail eingeben" // Platzhalter für E-Mail
+          />
 
           <FormField
-            title="Passwort:" //Einstellungen für das Log in Feld für das Passwort
+            title="Passwort:"
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
-          ></FormField>
+            placeholder="Passwort eingeben" // Platzhalter für Passwort
+          />
 
           <CustomButton
             title="Registrieren"
             handlePress={submit}
-            containerStyles=" w-full mt-7 justify-center items-center px-24"
+            containerStyles={styles.buttonContainer}
             isLoading={isSubmitting}
-          ></CustomButton>
+          />
 
-          <View className="justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-black-100 font-pregular">
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>
               Sie haben bereits ein Konto?
             </Text>
-
-            <Link
-              href="/sign-in"
-              className="text-lg font-psemibold text-blue-700"
-            >
+            <Link href="/sign-in" style={styles.registerLink}>
               Anmelden
             </Link>
           </View>
@@ -93,5 +93,49 @@ const SignUp = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F7F7F7", // Hintergrundfarbe
+  },
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  innerContainer: {
+    alignItems: "center",
+    padding: 20,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0a0a0a",
+    borderRadius: 10,
+    width: 350,
+  },
+  registerContainer: {
+    justifyContent: "center",
+    paddingTop: 20,
+    flexDirection: "row",
+  },
+  registerText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  registerLink: {
+    fontSize: 16,
+    color: "#4CAF50",
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+});
 
 export default SignUp;

@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import {
   Image,
   StyleSheet,
-  Platform,
-  Button,
   Alert,
   View,
   Text,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { useCameraPermissions, useMicrophonePermissions } from "expo-camera";
 import { usePermissions } from "expo-media-library";
@@ -18,8 +17,8 @@ import NummericField from "../../components/NummericField";
 import { icons } from "../../constants";
 
 const Scannen = () => {
-  const [barcode, setBarcode] = useState(Array(13).fill("")); // Array für den Barcode
-
+  const [barcode, setBarcode] = useState(Array(13).fill(""));
+  const [isManualInputVisible, setIsManualInputVisible] = useState(false);
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [mediaLibraryPermission, requestMediaLibraryPermission] =
     usePermissions();
@@ -27,28 +26,27 @@ const Scannen = () => {
   const openKamera = async () => {
     const allPermissionsGranted = await requestAllPermissions();
     if (allPermissionsGranted) {
-      // navigate to tabs
-      router.replace("../Kamera/CameraUsage");
+      router.push("../Kamera/CameraUsage");
     } else {
-      Alert.alert("To continue please provide permissions in settings");
+      Alert.alert(
+        "Um fortzufahren, gewähren Sie bitte Berechtigungen in den Einstellungen."
+      );
     }
   };
 
   async function requestAllPermissions() {
     const cameraStatus = await requestCameraPermission();
     if (!cameraStatus.granted) {
-      Alert.alert("Error", "Camera permission is required.");
+      Alert.alert("Fehler", "Kamera-Berechtigung wird benötigt.");
       return false;
     }
 
     const mediaLibraryStatus = await requestMediaLibraryPermission();
     if (!mediaLibraryStatus.granted) {
-      Alert.alert("Error", "Media Library permission is required.");
+      Alert.alert("Fehler", "Zugriff auf die Mediathek wird benötigt.");
       return false;
     }
 
-    // only set to true once user provides permissions
-    // this prevents taking user to home screen without permissions
     await AsyncStorage.setItem("hasOpened", "true");
     return true;
   }
@@ -57,66 +55,185 @@ const Scannen = () => {
     setBarcode(newBarcode);
   };
 
-  return (
-    <View className="flex-1 bg-secondary">
-      <ScrollView className="flex-1 px-4 mt-10">
-        <Text className="text-2xl text-white font-semibold text-center ">
-          Lebensmittel Scannen
-        </Text>
+  const toggleManualInput = () => {
+    setIsManualInputVisible((prevState) => !prevState);
+  };
 
-        {/* Anleitung für Benutzer */}
-        <View className="bg-white rounded-lg shadow-lg p-4 mt-5">
-          <Text className="text-lg font-semibold mb-2">So funktioniert's:</Text>
-          <Text className="text-gray-700 mb-4">
+  return (
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.title}>Lebensmittel Scannen</Text>
+
+        <View style={styles.instructionContainer}>
+          <Text style={styles.instructionTitle}>So funktioniert's:</Text>
+          <Text style={styles.instructionText}>
             Scannen Sie den Barcode eines Lebensmittels, um die Inhaltsstoffe zu
             überprüfen und sicherzustellen, dass sie verträglich sind. Sie haben
             zwei Möglichkeiten:
           </Text>
-          <Text className="text-gray-600 mb-2">
-            1. **Kamera verwenden:** Tippen Sie auf die Schaltfläche "Kamera
-            öffnen", um die Kamera zu aktivieren und den Barcode zu scannen.
-          </Text>
-          <Text className="text-gray-600 mb-2">
-            2. **Barcode manuell eingeben:** Geben Sie den Barcode in das
-            Eingabefeld ein, wenn das Scannen nicht möglich ist.
-          </Text>
-          <Text className="text-gray-600">
+
+          <View style={styles.methodContainer}>
+            <TouchableOpacity style={styles.methodBox} onPress={openKamera}>
+              <View style={styles.methodContent}>
+                <Image
+                  source={icons.kamera}
+                  style={[styles.methodIcon, { tintColor: "#FFFFFF" }]}
+                />
+                <Text style={styles.methodText}>Kamera verwenden</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.methodBox}
+              onPress={toggleManualInput}
+            >
+              <View style={styles.methodContent}>
+                <Image
+                  source={icons.barcode}
+                  style={[styles.methodIcon, { tintColor: "#FFFFFF" }]}
+                />
+                <Text style={styles.methodText}>Barcode manuell eingeben</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {isManualInputVisible && (
+            <View style={styles.barcodeContainer}>
+              <NummericField
+                title="Barcode manuell eingeben: "
+                placeholder=" "
+                otherStyles={styles.numericField}
+                value={barcode}
+                handleChangeText={handleBarcodeChange}
+              />
+            </View>
+          )}
+
+          <Text style={styles.instructionText}>
             Nutzen Sie die Kamera für eine schnelle und einfache Überprüfung
             Ihrer Lebensmittel!
           </Text>
-          {/* Platzhalter für Grafiken */}
           <Image
-            source={icons.barcodelesegerat} // Fügen Sie hier die URL oder den Import Ihrer Grafik ein
+            source={icons.barcodelesegerat}
             resizeMode="contain"
-            className=" w-full h-15"
+            style={styles.image}
           />
         </View>
 
-        {/* Schaltfläche zum Öffnen der Kamera */}
         <CustomButton
-          title="Kamera öffnen"
+          title="Artikel suchen..."
           handlePress={openKamera}
-          containerStyles="mt-7"
+          containerStyles={styles.buttonContainer}
         />
 
-        {/* Eingabefeld für den Barcode */}
-        <View className="bg-blue-100 rounded-lg shadow-lg p-4 mt-5">
-          <NummericField
-            title="Barcode manuell eingeben: "
-            placeholder=" "
-            otherStyles="mt-1"
-            value={barcode} // Aktuellen Barcode übergeben
-            handleChangeText={handleBarcodeChange} // Funktion zum Aktualisieren des Barcodes
-          />
-        </View>
-
-        {/* Hinweis für den Benutzer */}
-        <Text className="text-gray-400 text-center mt-4">
+        <Text style={styles.footerText}>
           Scanne den Barcode eines Produkts oder gib ihn manuell ein.
         </Text>
       </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F7F7F7",
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+  },
+  title: {
+    fontSize: 24,
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  instructionContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    marginBottom: 20,
+  },
+  instructionTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  instructionText: {
+    color: "#737373",
+    marginBottom: 30,
+    marginTop: 10,
+  },
+  methodContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  methodContent: {
+    marginTop: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  methodBox: {
+    flex: 1,
+    backgroundColor: "#2e8b57",
+    borderRadius: 12,
+    padding: 15,
+    marginHorizontal: 4,
+    alignItems: "center",
+    elevation: 3,
+  },
+  methodIcon: {
+    width: 28,
+    height: 28,
+    marginBottom: 8,
+  },
+  methodText: {
+    fontSize: 16,
+    color: "#f8faf7",
+    textAlign: "center",
+  },
+  image: {
+    width: "100%",
+    height: 130,
+    marginTop: 10,
+  },
+  buttonContainer: {
+    marginTop: 15,
+  },
+  barcodeContainer: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  numericField: {
+    marginTop: 10,
+  },
+  footerText: {
+    color: "#A0A0A0",
+    textAlign: "center",
+    marginTop: 20,
+  },
+});
 
 export default Scannen;

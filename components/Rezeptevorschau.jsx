@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { ResizeMode } from "expo-av";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { icons } from "../constants";
+import StarRating from "./StarRating";
 
 const Rezeptevorschau = ({
   rezept: {
@@ -11,8 +11,11 @@ const Rezeptevorschau = ({
     Beschreibung,
     Bilder,
     user: { username, avatar },
+    Starrating,
   },
 }) => {
+  const [userRating, setUserRating] = useState(Starrating);
+
   const handlePress = () => {
     router.push({
       pathname: "/Rezepte/rezeptedetail",
@@ -28,49 +31,103 @@ const Rezeptevorschau = ({
   };
 
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      className="flex flex-col items-center px-4 mb-5"
-      style={{
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
-      }}
-    >
-      <View className="gap-2 bg-white p-1.5 w-full shadow-md rounded-xl min-h-[60px] flex flex-row justify-center items-center">
-        {/* Avatar Bild mit abgerundeten Ecken */}
-        <View className="flex justify-center items-center flex-row flex-1">
-          <View className="w-[50px] h-[50px] rounded-full border border-gray-300 flex justify-center items-center p-0.5">
-            <Image
-              source={{ uri: Bilder }}
-              className="w-full h-full rounded-full"
-              resizeMode="cover"
-            />
-          </View>
+    <TouchableOpacity onPress={handlePress} style={styles.cardContainer}>
+      <View style={styles.cardContent}>
+        {/* Avatar und Bild */}
+        <View style={styles.avatarContainer}>
+          <Image
+            source={{ uri: avatar }}
+            style={styles.avatarImage}
+            resizeMode="cover"
+          />
+        </View>
 
-          {/* Titel und Username */}
-          <View className="flex justify-center flex-1 ml-4 gap-y-1">
-            <Text
-              className="font-semibold text-base text-gray-900"
-              numberOfLines={1}
-            >
-              {titel}
-            </Text>
-            <Text className="text-xs text-gray-500" numberOfLines={1}>
-              {username}
-            </Text>
-          </View>
+        {/* Titel und Username */}
+        <View style={styles.textContainer}>
+          <Text style={styles.titleText} numberOfLines={1}>
+            {titel}
+          </Text>
+          <Text style={styles.usernameText} numberOfLines={1}>
+            von {username}
+          </Text>
+
+
+
         </View>
 
         {/* Menü Icon */}
-        <View className="pt-2">
-          <Image source={icons.menu} className="w-5 h-5" resizeMode="contain" />
+        <View style={styles.menuIconContainer}>
+          <Image
+            source={icons.menu}
+            style={styles.menuIcon}
+            resizeMode="contain"
+          />
         </View>
       </View>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    backgroundColor: "#FFF",
+    borderRadius: 15,
+    marginVertical: 3,
+    marginHorizontal: 16,
+    padding: 4,
+  },
+  cardContent: {
+    backgroundColor: "#fff",
+    padding: 4,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatarContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#DFD8C8",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+  },
+  textContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  titleText: {
+    fontFamily: "HelveticaNeue-Bold",
+    fontSize: 18,
+    color: "#52575D",
+  },
+  usernameText: {
+    fontFamily: "HelveticaNeue",
+    fontSize: 14,
+    color: "#A9A9A9",
+    marginTop: 4,
+  },
+  starRating: {
+    marginTop: 8,
+  },
+  menuIconContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  menuIcon: {
+    width: 24,
+    height: 24,
+  },
+});
 
 export default Rezeptevorschau;

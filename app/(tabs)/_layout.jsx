@@ -7,7 +7,10 @@ import { Loader } from "../../components";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center gap-1.5" style={{ marginTop: 10 }}>
+    <View
+      className="items-center justify-center gap-1.5"
+      style={{ marginTop: 18 }}
+    >
       <Image
         source={icon}
         resizeMode="contain"
@@ -15,8 +18,11 @@ const TabIcon = ({ icon, color, name, focused }) => {
         className="w-5 h-5"
       />
       <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
-        style={{ color: color }}
+        className="text-l"
+        style={{
+          color: color, // Textfarbe auf Iconfarbe setzen
+          fontWeight: focused ? "bold" : "normal", // fett bei Fokussierung
+        }}
       >
         {name}
       </Text>
@@ -33,13 +39,12 @@ const TabLayout = () => {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: "#4e6db1",
-          tabBarInactiveTintColor: "#CDCDE0",
-          tabBarShowLabel: false,
+          tabBarActiveTintColor: "#b3aa94", // Aktive Farbe
+          tabBarInactiveTintColor: "#fafafa", // Inaktive Farbe
+          tabBarShowLabel: true, // Beschriftungen anzeigen
           tabBarStyle: {
-            backgroundColor: "#111827",
+            backgroundColor: "#254520",
             borderTopWidth: 0,
-            borderTopColor: "#30302b",
             height: 75,
           },
         }}
@@ -47,7 +52,7 @@ const TabLayout = () => {
         <Tabs.Screen
           name="Home"
           options={{
-            title: "Home",
+            title: "Startseite",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
@@ -89,7 +94,6 @@ const TabLayout = () => {
             ),
           }}
         />
-
         <Tabs.Screen
           name="Erstellen"
           options={{
@@ -108,7 +112,7 @@ const TabLayout = () => {
         <Tabs.Screen
           name="profile"
           options={{
-            title: "Profile",
+            title: "Profil",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
@@ -122,7 +126,7 @@ const TabLayout = () => {
         />
       </Tabs>
       <Loader isLoading={loading} />
-      <StatusBar backgroundColor="#161622" style="light" />
+      <StatusBar backgroundColor="#4CAF50" style="dark" />
     </>
   );
 };
