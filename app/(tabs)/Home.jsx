@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   FlatList,
@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  Animated,
 } from "react-native";
 import { images } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
@@ -16,6 +17,7 @@ import { EmptyState, SearchInput } from "../../components";
 import Rezeptevorschau from "../../components/Rezeptevorschau";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router } from "expo-router";
+import AnimatedHeaderHome from "../../components/AnimatedHeaderHome"; // Default-Import korrekt anwenden
 
 const categories = [
   { id: "1", name: "Frühstück" },
@@ -39,15 +41,33 @@ const Home = () => {
     router.push("/(tabs)/profile");
   };
 
+  // Animated Value für die Scroll-Position
+  const offset = useRef(new Animated.Value(0)).current;
+
+  // Icon Größe und Position abhängig vom Scroll-Offset
+  const iconSize = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [30, 20], // Reduziert die Größe beim Scrollen
+    extrapolate: "clamp",
+  });
+
+  const iconPosition = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -50], // Bewegt das Icon nach oben beim Scrollen
+    extrapolate: "clamp",
+  });
+
   const { user } = useGlobalContext();
   const { username, avatar } = user;
 
-  const visiblePosts = posts.slice(0, 5);
+  const visiblePosts = posts.slice(0, 5); //einstellung für anzahl posts
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Animated Header */}
+      <AnimatedHeaderHome animatedValue={offset} />
+
       <FlatList
-        contentContainerStyle={styles.contentContainer}
         data={!showMore ? visiblePosts : []} // Wenn nicht "Mehr anzeigen", zeige nur 5 Rezepte
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <Rezeptevorschau rezept={item} />}
@@ -140,6 +160,12 @@ const Home = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        // Scroll-Events überwachen und die Animation updaten
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
       />
     </SafeAreaView>
   );
@@ -149,6 +175,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F7F7F7",
+    paddingTop: 47,
   },
   contentContainer: {
     paddingTop: 30,
@@ -158,6 +185,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 16,
+    paddingTop: 20,
   },
   welcomeContainer: {
     flexDirection: "row",

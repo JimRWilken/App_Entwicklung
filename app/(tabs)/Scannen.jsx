@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Image,
   StyleSheet,
@@ -6,6 +6,8 @@ import {
   View,
   Text,
   ScrollView,
+  SafeAreaView,
+  Animated,
   TouchableOpacity,
 } from "react-native";
 import { useCameraPermissions, useMicrophonePermissions } from "expo-camera";
@@ -15,6 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CustomButton } from "../../components";
 import NummericField from "../../components/NummericField";
 import { icons } from "../../constants";
+import AnimatedHeaderScannen from "../../components/AnimatedHeaderScannen"; // Default-Import korrekt anwenden
 
 const Scannen = () => {
   const [barcode, setBarcode] = useState(Array(13).fill(""));
@@ -59,17 +62,45 @@ const Scannen = () => {
     setIsManualInputVisible((prevState) => !prevState);
   };
 
-  return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <Text style={styles.title}>Lebensmittel Scannen</Text>
+  // Animated Value für die Scroll-Position
+  const offset = useRef(new Animated.Value(0)).current;
 
+  // Icon Größe und Position abhängig vom Scroll-Offset
+  const iconSize = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [30, 20], // Reduziert die Größe beim Scrollen
+    extrapolate: "clamp",
+  });
+
+  const iconPosition = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -50], // Bewegt das Icon nach oben beim Scrollen
+    extrapolate: "clamp",
+  });
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Animated Header */}
+      <AnimatedHeaderScannen animatedValue={offset} />
+
+      {/* ScrollView mit Scroll-Events */}
+      <Animated.ScrollView
+        style={styles.scrollView}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false } // Nutze den useNativeDriver für flüssige Animationen
+        )}
+        scrollEventThrottle={16} // Für häufige Updates der Scroll-Position
+      >
         <View style={styles.instructionContainer}>
           <Text style={styles.instructionTitle}>So funktioniert's:</Text>
           <Text style={styles.instructionText}>
-            Scannen Sie den Barcode eines Lebensmittels, um die Inhaltsstoffe zu
-            überprüfen und sicherzustellen, dass sie verträglich sind. Sie haben
-            zwei Möglichkeiten:
+            Mit dieser App können Sie den Barcode eines Lebensmittels scannen,
+            um detaillierte Informationen über die Inhaltsstoffe zu erhalten.
+            Dadurch können Sie schnell und einfach überprüfen, ob die
+            Inhaltsstoffe mit Ihren Unverträglichkeiten übereinstimmen und
+            sicherstellen, dass das Produkt für Sie geeignet ist. Sie haben zwei
+            verschiedene Möglichkeiten, um dies zu tun:
           </Text>
 
           <View style={styles.methodContainer}>
@@ -129,10 +160,10 @@ const Scannen = () => {
         <Text style={styles.footerText}>
           Scanne den Barcode eines Produkts oder gib ihn manuell ein.
         </Text>
-      </ScrollView>
-    </View>
+      </Animated.ScrollView>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -206,7 +237,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 130,
+    height: 300,
     marginTop: 10,
   },
   buttonContainer: {

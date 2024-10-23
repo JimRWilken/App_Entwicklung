@@ -5,6 +5,13 @@ import Loader from "./Loader";
 import Trending from "./Trending";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
+import AnimatedHeaderProfil from "./AnimatedHeaderProfil";
+import AnimatedHeaderHome from "./AnimatedHeaderHome";
+import AnimatedHeaderKrankheiten from "./AnimatedHeaderKrankheiten";
+import AnimatedHeaderScannen from "./AnimatedHeaderScannen";
+import AnimatedHeaderRezeptdetail from "./AnimatedHeaderRezeptdetail";
+import AnimatedHeaderErstellen from "./AnimatedHeaderErstellen";
+
 
 export {
   FormField,
@@ -14,4 +21,10 @@ export {
   Trending,
   SearchInput,
   EmptyState,
+  AnimatedHeaderProfil,
+  AnimatedHeaderHome,
+  AnimatedHeaderKrankheiten,
+  AnimatedHeaderScannen,
+  AnimatedHeaderRezeptdetail,
+  AnimatedHeaderErstellen,
 };

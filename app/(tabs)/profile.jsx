@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
+  Animated, // Für die Animation importieren
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -16,13 +17,35 @@ import useAppwrite from "../../lib/useAppwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { EmptyState } from "../../components";
 import Rezeptevorschau from "../../components/Rezeptevorschau";
-import { getUserRezepte, updateAvatar } from "../../lib/appwrite"; // Funktion zum Aktualisieren des Avatars importieren
+import {
+  getUserRezepte,
+  updateAvatar,
+  getCurrentUser,
+} from "../../lib/appwrite";
+import AnimatedHeaderProfil from "../../components/AnimatedHeaderProfil"; // Default-Import korrekt anwenden
+// Funktion zum Aktualisieren des Avatars importieren
 
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts, loading, refetch } = useAppwrite(getUserRezepte);
 
   const [refreshing, setRefreshing] = useState(false);
+
+  // Animated Value für die Scroll-Position
+  const offset = useRef(new Animated.Value(0)).current;
+
+  // Icon Größe und Position abhängig vom Scroll-Offset
+  const iconSize = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [30, 20], // Reduziert die Größe beim Scrollen
+    extrapolate: "clamp",
+  });
+
+  const iconPosition = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -50], // Bewegt das Icon nach oben beim Scrollen
+    extrapolate: "clamp",
+  });
 
   // Funktion zum Öffnen des Image Pickers und Aktualisieren des Avatars
   const pickImage = async () => {
@@ -38,14 +61,12 @@ const Profile = () => {
       const avatarUri = result.assets[0].uri;
 
       console.log("Selected Image URI:", avatarUri);
+      const currentuser = await getCurrentUser();
+      if (!currentuser) throw new Error("Kein Benutzer angemeldet.");
+
       // Hier kannst du die Funktion aufrufen, um das Avatar zu aktualisieren
-      await updateAvatar(avatarUri);
+      await updateAvatar({ avatarUri, currentuser });
     }
-  };
-
-
-  const settingspush = async () => {
-    router.push("/Profileinstellungen/Settings");
   };
 
   const onRefresh = async () => {
@@ -56,33 +77,29 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Animated Header */}
+      <AnimatedHeaderProfil animatedValue={offset} />
+
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <Rezeptevorschau rezept={item} />}
         ListHeaderComponent={() => (
-          <View>
-            <View style={styles.titleBar}>
-              <TouchableOpacity onPress={settingspush} style={styles.button}>
-                <MaterialIcons name="settings" size={30} color="#0a0a0a" />
-              </TouchableOpacity>
-            </View>
-
+          <View style={{ paddingTop: 50 }}>
             <View style={{ alignSelf: "center" }}>
               <View style={styles.profileImage}>
                 <Image
                   source={{ uri: user?.avatar }}
                   style={styles.image}
-                  resizeMode="center"
+                  resizeMode="cover"
                 />
               </View>
 
-              {/* Avatar ändern Button */}
               <TouchableOpacity style={styles.add} onPress={pickImage}>
                 <MaterialIcons
                   name="edit"
                   size={30}
-                  color="#000"
+                  color="#808080"
                   style={{ marginTop: 6, marginLeft: 2 }}
                 />
               </TouchableOpacity>
@@ -90,7 +107,7 @@ const Profile = () => {
 
             <View style={styles.infoContainer}>
               <Text style={styles.usernameText}>{user?.username}</Text>
-              <Text style={[styles.text, { color: "#AEB5BC", fontSize: 18 }]}>
+              <Text style={[styles.text, { color: "#808080", fontSize: 18 }]}>
                 {user?.email}
               </Text>
             </View>
@@ -118,6 +135,12 @@ const Profile = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        // Scroll-Events überwachen und die Animation updaten
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
       />
     </SafeAreaView>
   );
@@ -151,7 +174,9 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 100,
     overflow: "hidden",
-    borderWidth: 4,
+    borderWidth: 2,
+    paddingTop: 0,
+    borderColor: "#808080",
   },
   add: {
     backgroundColor: "#f8faf7",
@@ -163,7 +188,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
+    borderWidth: 2,
+    borderColor: "#254520",
   },
   infoContainer: {
     alignSelf: "center",

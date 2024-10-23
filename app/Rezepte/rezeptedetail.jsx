@@ -6,32 +6,54 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Animated,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { useRef } from "react";
 import { SafeAreaView, StatusBar } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useRouter } from "expo-router";
+import AnimatedHeaderRezeptdetail from "../../components/AnimatedHeaderRezeptdetail"; // Default-Import korrekt anwenden
 
 const RezeptDetail = () => {
   const route = useRoute(); // Holt die übergebenen Parameter
   const { titel, Zutaten, Beschreibung, Bilder, username, avatar } =
     route.params; // Rezeptdaten
-  
+
   const goBack = () => {
     router.back();
-  }
+  };
+
+  // Animated Value für die Scroll-Position
+  const offset = useRef(new Animated.Value(0)).current;
+
+  // Icon Größe und Position abhängig vom Scroll-Offset
+  const iconSize = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [30, 20], // Reduziert die Größe beim Scrollen
+    extrapolate: "clamp",
+  });
+
+  const iconPosition = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -50], // Bewegt das Icon nach oben beim Scrollen
+    extrapolate: "clamp",
+  });
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <View style={styles.titleBar}>
-          <TouchableOpacity onPress={goBack}>
-            <MaterialIcons name="west" size={30} color="#52575D" />
-          </TouchableOpacity>
-          <Text style={styles.title}>Rezeptdetails</Text>
-        </View>
-
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      {/* Animated Header */}
+      <AnimatedHeaderRezeptdetail animatedValue={offset} />
+      {/* ScrollView mit Scroll-Events */}
+      <Animated.ScrollView
+        style={styles.scrollView}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false } // Nutze den useNativeDriver für flüssige Animationen
+        )}
+        scrollEventThrottle={16} // Für häufige Updates der Scroll-Position
+      >
+        <View contentContainerStyle={styles.scrollViewContent}>
           {/* Rezeptbild */}
           <View style={styles.imageContainer}>
             <Image
@@ -83,8 +105,8 @@ const RezeptDetail = () => {
               <Text style={styles.buttonText}>Rezept bearbeiten</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };
@@ -93,7 +115,7 @@ const RezeptDetail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#F7F7F7",
   },
   titleBar: {
     flexDirection: "row", // Inhalte in einer Reihe

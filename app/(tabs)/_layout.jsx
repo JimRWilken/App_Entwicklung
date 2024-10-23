@@ -1,27 +1,50 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Animated } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import { icons } from "../../constants";
 import { StatusBar } from "expo-status-bar";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Loader } from "../../components";
+import { useEffect, useRef } from "react";
 
 const TabIcon = ({ icon, color, name, focused }) => {
+  const scaleValue = useRef(new Animated.Value(1)).current;
+
+    const { user } = useGlobalContext();
+    const { username, avatar } = user;
+
+  useEffect(() => {
+    Animated.timing(scaleValue, {
+      toValue: focused ? 1.2 : 1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  }, [focused]);
+
   return (
     <View
-      className="items-center justify-center gap-1.5"
-      style={{ marginTop: 18 }}
+      style={{ alignItems: "center", justifyContent: "center", marginTop: 15 }}
     >
-      <Image
-        source={icon}
-        resizeMode="contain"
-        tintColor={color}
-        className="w-5 h-5"
-      />
+      <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+        {name === "Profil" && avatar ? (
+          <Image
+            source={{ uri: user?.avatar }} // Avatar-URL hier verwenden
+            style={{ width: 25, height: 25, borderRadius: 15 }} // Avatar-Stil
+          />
+        ) : (
+          <Image
+            source={icon}
+            resizeMode="contain"
+            tintColor={color}
+            style={{ width: 22, height: 22 }} // Größe der Icons angepasst
+          />
+        )}
+      </Animated.View>
       <Text
-        className="text-l"
         style={{
-          color: color, // Textfarbe auf Iconfarbe setzen
-          fontWeight: focused ? "bold" : "normal", // fett bei Fokussierung
+          color: color,
+          fontWeight: focused ? "bold" : "normal", // Fett bei Fokussierung
+          fontSize: focused ? 11 : 9, // Schriftgröße ändern
+          marginTop: 5, // Abstand zwischen Icon und Text
         }}
       >
         {name}
@@ -39,13 +62,14 @@ const TabLayout = () => {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: "#b3aa94", // Aktive Farbe
+          tabBarActiveTintColor: "#fafafa", // Aktive Farbe
           tabBarInactiveTintColor: "#fafafa", // Inaktive Farbe
-          tabBarShowLabel: true, // Beschriftungen anzeigen
+          tabBarShowLabel: false, // Beschriftungen anzeigen
           tabBarStyle: {
             backgroundColor: "#254520",
             borderTopWidth: 0,
             height: 75,
+            elevation: 10, // Schatten für die Tabbar hinzufügen
           },
         }}
       >

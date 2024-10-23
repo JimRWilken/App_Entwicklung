@@ -92,7 +92,7 @@ const SettingsScreen = () => {
         {/* Title Bar */}
         <View style={styles.titleBar}>
           <TouchableOpacity onPress={goBack}>
-            <MaterialIcons name="west" size={30} color="#52575D" />
+            <MaterialIcons name="west" size={30} color="#000" />
           </TouchableOpacity>
           <Text style={styles.title}>Einstellungen</Text>
           <TouchableOpacity onPress={logout} style={styles.button}>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     flex: 1, // Nimmt den verfügbaren Platz ein
     textAlign: "center", // Zentriert den Text
     fontSize: 24,
-    color: "#52575D",
+    color: "#000",
     fontFamily: "HelveticaNeue-Bold",
     marginRight: 0,
   },

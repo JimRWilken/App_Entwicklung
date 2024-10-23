@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Animated,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
@@ -17,6 +18,7 @@ import { createRezeptPost } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { icons } from "../../constants";
 import * as DocumentPicker from "expo-document-picker";
+import AnimatedHeaderErstellen from "../../components/AnimatedHeaderErstellen"; // Default-Import korrekt anwenden
 
 const Erstellen = () => {
   const { user } = useGlobalContext();
@@ -87,10 +89,34 @@ const Erstellen = () => {
     }
   };
 
+  // Animated Value für die Scroll-Position
+  const offset = useRef(new Animated.Value(0)).current;
+
+  // Icon Größe und Position abhängig vom Scroll-Offset
+  const iconSize = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [30, 20], // Reduziert die Größe beim Scrollen
+    extrapolate: "clamp",
+  });
+
+  const iconPosition = offset.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -50], // Bewegt das Icon nach oben beim Scrollen
+    extrapolate: "clamp",
+  });
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.headerText}>Erstelle ein Rezept</Text>
+      <AnimatedHeaderErstellen animatedValue={offset} />
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        // Scroll-Events überwachen und die Animation updaten
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false } // nativeDriver auf false setzen, wenn du das DOM nicht direkt manipulierst
+        )}
+        scrollEventThrottle={16} // wie oft das Scroll-Event gefeuert wird
+      >
 
         <FormField
           title="Titel des Rezepts:"
